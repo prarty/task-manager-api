@@ -1,5 +1,6 @@
 package com.hackerearth.taskmanager.service;
 
+import com.hackerearth.taskmanager.api.request.CreateTaskRequest;
 import com.hackerearth.taskmanager.model.Task;
 import com.hackerearth.taskmanager.model.User;
 import com.hackerearth.taskmanager.repository.TaskRepository;
@@ -11,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.xml.bind.ValidationException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -26,14 +26,23 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    @Transactional
     public List<Task> getAllTasks(int userId) throws ValidationException {
-       List<Task> response = null;
-        System.out.println("id"+userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException("not found"));
-        System.out.println("user"+user);
-        response = taskRepository.findAllByUserId(user.getId()).orElse(Collections.emptyList());
-        System.out.println("response"+response);
-        return response;
+       User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException("User not found"));
+
+       return taskRepository.findAllByUserId(user.getId()).orElse(Collections.emptyList());
+    }
+
+    @Transactional
+    public void createTask(int userId, CreateTaskRequest request) throws ValidationException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException("User not found"));
+        Task newTask = Task.builder()
+                            .description(request.getDescription())
+                            .dueDate(request.getDueDate())
+                            .label(request.getLabel())
+                            .status(request.getStatus())
+                            .user(user)
+                            .build();
+
+        taskRepository.save(newTask);
     }
 }

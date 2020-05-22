@@ -1,13 +1,14 @@
 package com.hackerearth.taskmanager.api;
 
+import com.hackerearth.taskmanager.api.request.CreateTaskRequest;
+import com.hackerearth.taskmanager.api.response.GenericResponse;
 import com.hackerearth.taskmanager.model.Task;
 import com.hackerearth.taskmanager.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.xml.bind.ValidationException;
 import java.util.List;
 
@@ -25,5 +26,12 @@ public class TasksController {
     @GetMapping("/{userId}/tasks")
     List<Task> getAllTasks(@PathVariable("userId") int userId) throws ValidationException {
         return taskService.getAllTasks(userId);
+    }
+
+    @PostMapping("/{userId}/tasks/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    GenericResponse<String> createTask(@PathVariable("userId") int userId, @Valid @RequestBody CreateTaskRequest request) throws ValidationException {
+         taskService.createTask(userId, request);
+         return new GenericResponse<>("Success");
     }
 }

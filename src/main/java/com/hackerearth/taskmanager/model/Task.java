@@ -1,7 +1,6 @@
 package com.hackerearth.taskmanager.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,11 +8,14 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "tasks")
 @Data
+@Builder
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class Task {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    Long id;
 
     @Column(name = "description")
     String description;
