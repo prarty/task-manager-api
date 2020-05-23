@@ -31,10 +31,14 @@ dependencies {
 
 	annotationProcessor 'org.projectlombok:lombok'
 
+	runtime 'mysql:mysql-connector-java:8.0.19'
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	testCompile "org.testcontainers:testcontainers:1.14.2"
+	testImplementation('org.testcontainers:mysql:1.12.4') //no version specified
 }
 
 test {
